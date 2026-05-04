@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from dotenv import load_dotenv
 import networkx as nx
 
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 from src.models import (
     Base, Department, Instructor, Course, Prerequisite,
     CourseSearchOutput, PrerequisiteOutput, CourseMinInfo,

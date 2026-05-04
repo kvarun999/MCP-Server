@@ -130,17 +130,16 @@ def course_comparison_template(course_code_1: str, course_code_2: str) -> str:
 # THE 100% HEALTH CHECK WRAPPER
 # ==========================================
 
-# 1. Initialize a pure FastAPI application
-app = FastAPI(title="University MCP Server")
+# ✅ Create mcp_app FIRST so we can reference its lifespan
+mcp_app = mcp.http_app(path='/')
 
-# 2. Add the exact endpoint the auto-grader demands
+# ✅ Pass the lifespan into FastAPI
+app = FastAPI(title="University MCP Server", lifespan=mcp_app.lifespan)
+
 @app.get("/health")
 async def health_check():
     return JSONResponse({"status": "healthy"}, status_code=200)
 
-# 3. Mount the MCP server to handle everything else (Tools, Prompts, etc.)
-# Because /health is defined above, FastAPI intercepts the health check first.
-mcp_app = mcp.http_app(path='/')
 app.mount("/", mcp_app)
 
 if __name__ == "__main__":
